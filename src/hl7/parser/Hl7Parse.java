@@ -15,7 +15,7 @@ public class Hl7Parse {
     }
 
 
-    public void parse() {
+    private void parse() {
         String[] segments = getSegments();
 
         for (String segment : segments) {

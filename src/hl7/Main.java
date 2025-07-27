@@ -1,7 +1,6 @@
 package hl7;
 
-import hl7.parser.Hl7Parse;
-import hl7.gui.Hl7Gui;
+import hl7.gui.frame;
 import javax.swing.SwingUtilities;
 
 
@@ -18,7 +17,7 @@ public class Main {
 
 //      var test = new Hl7Parse(message);
 
-        SwingUtilities.invokeLater(Hl7Gui::new);
+        SwingUtilities.invokeLater(frame::new);
 
 
 

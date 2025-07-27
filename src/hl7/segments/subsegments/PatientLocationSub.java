@@ -12,9 +12,10 @@ public class PatientLocationSub extends Hl7segment {
         private String building;
         private String floor;
         private String locationType;
+        private String[] parts;
 
         public PatientLocationSub(String field) {
-            String[] parts = field.split("\\^");
+            this.parts = field.split("\\^");
             this.pointOfCare = get(parts, 0);
             this.room = get(parts, 1);
             this.bed = get(parts, 2);
