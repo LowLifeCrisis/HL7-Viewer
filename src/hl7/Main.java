@@ -17,7 +17,7 @@ public class Main {
 
 //      var test = new Hl7Parse(message);
 
-        SwingUtilities.invokeLater(frame::new);
+        var frame = new frame();
 
 
 

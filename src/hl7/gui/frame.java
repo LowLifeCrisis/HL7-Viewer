@@ -1,20 +1,26 @@
 package hl7.gui;
 
-import javax.swing.JFrame;
-import javax.swing.ImageIcon;
+import javax.swing.*;
+import java.awt.*;
 import java.net.URL;
 
-public class frame {
+public class frame extends JFrame{
 
     public frame(){
-        var frame = new JFrame("HL7 Parser");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.setSize(700, 700);
-        frame.setVisible(true);
+        this.setTitle("HL7 Parser");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.setSize(800, 800);
 
-        URL iconURL = getClass().getResource("/hl7/images/important.jpg");
+
+
+        var iconURL = getClass().getResource("/hl7/images/important.jpg");
         var image = new ImageIcon(iconURL);
-        frame.setIconImage(image.getImage());
+        this.setIconImage(image.getImage());
+        this.getContentPane().setBackground(Color.DARK_GRAY);
+
+
+        this.setVisible(true);
+
     }
 }
