@@ -1,7 +1,6 @@
 package hl7;
 
-import hl7.gui.frame;
-import javax.swing.SwingUtilities;
+import hl7.gui.Frame;
 
 
 public class Main {
@@ -13,11 +12,8 @@ public class Main {
                 "RXE|1^TAB|Amoxicillin 500mg||500|MG|PO|Q8H|||10|D||||||||||20250727120000\n" +
                 "RXR|PO^Oral\n";
 
-        String message3 = "";
 
-//      var test = new Hl7Parse(message);
-
-        var frame = new frame();
+        var frame = new Frame();
 
 
 
