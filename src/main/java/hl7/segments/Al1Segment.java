@@ -2,20 +2,44 @@ package hl7.segments;
 
 public class Al1Segment extends Hl7segment {
     //listing all fields in AL1
-    private String setID;
-    private String allergyType;
-    private String allergyCodeMnemonicDesc;
-    private String allergySeverity;
-    private String allergyReaction;
-    private String identificationDate;
+    private String _setID;
+    private String _allergyType;
+    private String _allergyCodeMnemonicDesc;
+    private String _allergySeverity;
+    private String _allergyReaction;
+    private String _identificationDate;
 
 
     public Al1Segment(String[] fields){
-        this.setID = get(fields, 1);
-        this.allergyType = get(fields, 2);
-        this.allergyCodeMnemonicDesc = get(fields, 3);
-        this.allergySeverity = get(fields, 4);
-        this.allergyReaction = get(fields, 5);
-        this.identificationDate = get(fields, 6);
+        _setID = get(fields, 1);
+        _allergyType = get(fields, 2);
+        _allergyCodeMnemonicDesc = get(fields, 3);
+        _allergySeverity = get(fields, 4);
+        _allergyReaction = get(fields, 5);
+        _identificationDate = get(fields, 6);
+    }
+
+    public String getSetID() {
+        return _setID;
+    }
+
+    public String getAllergyType() {
+        return _allergyType;
+    }
+
+    public String getAllergyCodeMnemonicDesc() {
+        return _allergyCodeMnemonicDesc;
+    }
+
+    public String getAllergySeverity() {
+        return _allergySeverity;
+    }
+
+    public String getAllergyReaction() {
+        return _allergyReaction;
+    }
+
+    public String getIdentificationDate() {
+        return _identificationDate;
     }
 }

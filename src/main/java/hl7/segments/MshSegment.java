@@ -4,116 +4,116 @@ public class MshSegment extends Hl7segment {
     //listing all fields in MSH
     // MSH.1 declares field separator to be used( aka "|")
     // which we use in Hl7Parse as "|" is the standard
-    private String encodingCharacters;
-    private String sendingApplication;
-    private String sendingFacility;
-    private String receivingApplication;
-    private String receivingFacility;
-    private String dateTimeOfMessage;
-    private String security;
-    private String messageType;
-    private String messageControlId;
-    private String processingId;
-    private String versionId;
-    private String sequenceNumber;
-    private String continuationPointer;
-    private String acceptAckType;
-    private String appAckType;
-    private String countryCode;
-    private String characterSet;
-    private String principalLangOfMessage;
+    private String _encodingCharacters;
+    private String _sendingApplication;
+    private String _sendingFacility;
+    private String _receivingApplication;
+    private String _receivingFacility;
+    private String _dateTimeOfMessage;
+    private String _security;
+    private String _messageType;
+    private String _messageControlId;
+    private String _processingId;
+    private String _versionId;
+    private String _sequenceNumber;
+    private String _continuationPointer;
+    private String _acceptAckType;
+    private String _appAckType;
+    private String _countryCode;
+    private String _characterSet;
+    private String _principalLangOfMessage;
 
     public MshSegment(String[] fields) {
 
-        this.encodingCharacters = get(fields, 1);
-        this.sendingApplication = get(fields, 2);
-        this.sendingFacility = get(fields, 3);
-        this.receivingApplication = get(fields, 4);
-        this.receivingFacility = get(fields, 5);
-        this.dateTimeOfMessage = get(fields, 6);
-        this.security = get(fields, 7);
-        this.messageType = get(fields, 8);
-        this.messageControlId = get(fields, 9);
-        this.processingId = get(fields, 10);
-        this.versionId = get(fields, 11);
-        this.sequenceNumber = get(fields, 12);
-        this.continuationPointer = get(fields, 13);
-        this.acceptAckType = get(fields, 14);
-        this.appAckType = get(fields, 15);
-        this.countryCode = get(fields, 16);
-        this.characterSet = get(fields, 17);
-        this.principalLangOfMessage = get(fields, 18);
+        _encodingCharacters = get(fields, 1);
+        _sendingApplication = get(fields, 2);
+        _sendingFacility = get(fields, 3);
+        _receivingApplication = get(fields, 4);
+        _receivingFacility = get(fields, 5);
+        _dateTimeOfMessage = get(fields, 6);
+        _security = get(fields, 7);
+        _messageType = get(fields, 8);
+        _messageControlId = get(fields, 9);
+        _processingId = get(fields, 10);
+        _versionId = get(fields, 11);
+        _sequenceNumber = get(fields, 12);
+        _continuationPointer = get(fields, 13);
+        _acceptAckType = get(fields, 14);
+        _appAckType = get(fields, 15);
+        _countryCode = get(fields, 16);
+        _characterSet = get(fields, 17);
+        _principalLangOfMessage = get(fields, 18);
     }
 
     public String getEncodingCharacters() {
-        return encodingCharacters;
+        return _encodingCharacters;
     }
 
     public String getSendingApplication() {
-        return sendingApplication;
+        return _sendingApplication;
     }
 
     public String getSendingFacility() {
-        return sendingFacility;
+        return _sendingFacility;
     }
 
     public String getReceivingApplication() {
-        return receivingApplication;
+        return _receivingApplication;
     }
 
     public String getReceivingFacility() {
-        return receivingFacility;
+        return _receivingFacility;
     }
 
     public String getDateTimeOfMessage() {
-        return dateTimeOfMessage;
+        return _dateTimeOfMessage;
     }
 
     public String getSecurity() {
-        return security;
+        return _security;
     }
 
     public String getMessageType() {
-        return messageType;
+        return _messageType;
     }
 
     public String getMessageControlId() {
-        return messageControlId;
+        return _messageControlId;
     }
 
     public String getProcessingId() {
-        return processingId;
+        return _processingId;
     }
 
     public String getVersionId() {
-        return versionId;
+        return _versionId;
     }
 
     public String getSequenceNumber() {
-        return sequenceNumber;
+        return _sequenceNumber;
     }
 
     public String getContinuationPointer() {
-        return continuationPointer;
+        return _continuationPointer;
     }
 
     public String getAcceptAckType() {
-        return acceptAckType;
+        return _acceptAckType;
     }
 
     public String getAppAckType() {
-        return appAckType;
+        return _appAckType;
     }
 
     public String getCountryCode() {
-        return countryCode;
+        return _countryCode;
     }
 
     public String getCharacterSet() {
-        return characterSet;
+        return _characterSet;
     }
 
     public String getPrincipalLangOfMessage() {
-        return principalLangOfMessage;
+        return _principalLangOfMessage;
     }
 }

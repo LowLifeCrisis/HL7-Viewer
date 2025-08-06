@@ -3,12 +3,13 @@ package hl7.parser;
 import hl7.segments.*;
 
 public class Hl7Parse {
-    private String message;
-    private MshSegment mshSegment;
+    private String _message;
+    private MshSegment _mshSegment;
+    private PidSegment _pidSegment;
 
 
     public Hl7Parse(String message)  {
-        this.message = message;
+        _message = message.trim();
         if (!isValidHl7()){
             throw new IllegalArgumentException("Invalid Hl7 Message. Try Again.");
         }
@@ -30,7 +31,7 @@ public class Hl7Parse {
 
             switch (segmentType) {
                 case "MSH":
-                    mshSegment = new MshSegment(fields);
+                    _mshSegment = new MshSegment(fields);
                     break;
 
                 case "PID":
@@ -70,7 +71,7 @@ public class Hl7Parse {
     private String[] splitSegments() {
         //Splitting Hl7 message into segments by carriage return \ new line
         // returns segments into array of strings
-        return this.message.split("[\\r\\n]");
+        return _message.split("[\\r\\n]");
     }
 
     private String[] splitFields(String segments) {
@@ -79,14 +80,14 @@ public class Hl7Parse {
     }
 
     private boolean isValidHl7(){
-        if (message.trim().isEmpty() || (!message.regionMatches(0,"MSH",0,3)) ) {
+        if (_message.trim().isEmpty() || (!_message.regionMatches(0,"MSH",0,3)) ) {
            return false;
         }
         return true;
     }
     
-    public Hl7segment getMshSegment(){
-        return mshSegment;
+    public Hl7segment get_mshSegment(){
+        return _mshSegment;
     }
 
 }

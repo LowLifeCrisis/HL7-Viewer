@@ -28,7 +28,7 @@ public class GuiBase extends JFrame{
         var iconURL = getClass().getResource("/images/important.jpg");
         var image = new ImageIcon(iconURL);
         setIconImage(image.getImage());
-        addMenuBar();
+        //addMenuBar();
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -156,7 +156,7 @@ public class GuiBase extends JFrame{
     private void viewProcessedMsg(String input){
         try{
             this.parse = new Hl7Parse(input);
-            MshSegment msh = (MshSegment) parse.getMshSegment();
+            var msh = (MshSegment) parse.get_mshSegment();
             tableModel.setRowCount(0);
 
 
@@ -180,8 +180,11 @@ public class GuiBase extends JFrame{
                     {"Character Set", msh.getCharacterSet()},
                     {"Principal Language", msh.getPrincipalLangOfMessage()}
             };
+
             for (Object[] row : tableData){
-                tableModel.addRow(row);
+                if (row[1] !=  null && !row[1].toString().trim().isEmpty()){
+                    tableModel.addRow(row);
+                }
             }
 
         } catch (IllegalArgumentException e ){
