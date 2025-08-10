@@ -1,4 +1,4 @@
-package hl7.gui;
+package hl7Viewer.gui;
 
 import javax.swing.border.EmptyBorder;
 import java.awt.*;

@@ -1,6 +1,4 @@
-package hl7.segments;
-
-import hl7.segments.subsegments.PatientLocationSub;
+package hl7Viewer.nonGui;
 
 public class Pv1Segment extends Hl7segment {
     //listing all fields in PV1
@@ -55,7 +53,7 @@ public class Pv1Segment extends Hl7segment {
     public Pv1Segment(String[] fields) {
         _setIdPatVisit = get(fields, 1);
         _patClass = get(fields, 2);
-        _assignedPatLocation = new PatientLocationSub(get(fields, 3)).toString();
+        _assignedPatLocation = get(fields, 3);
         _admissionType = get(fields, 4);
         _preadmitNumber = get(fields, 5);
         _priorPatLocation = get(fields, 6);

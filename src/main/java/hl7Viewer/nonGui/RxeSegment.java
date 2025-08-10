@@ -1,4 +1,4 @@
-package hl7.segments;
+package hl7Viewer.nonGui;
 
 public class RxeSegment extends Hl7segment{
     //listing all fields in RXE

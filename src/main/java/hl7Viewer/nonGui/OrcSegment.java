@@ -1,4 +1,4 @@
-package hl7.segments;
+package hl7Viewer.nonGui;
 
 
 public class OrcSegment extends Hl7segment{
