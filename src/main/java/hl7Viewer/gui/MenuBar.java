@@ -19,7 +19,7 @@ public class MenuBar extends JMenuBar {
         JMenu menu = getOrCreateMenu(menuName);
 
         if (!menuContainsItem(menu, itemName)) {
-            JMenuItem item = new JMenuItem(itemName);
+            var item = new JMenuItem(itemName);
             item.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
             Utilities.setPanelColors(item);
             item.addActionListener(e -> action.run());
@@ -34,15 +34,13 @@ public class MenuBar extends JMenuBar {
                 return menu;
             }
         }
-        JMenu newMenu = new JMenu(menuName);
+        var newMenu = new JMenu(menuName);
         newMenu.setForeground(Utilities.TEXT_COLOR);
         newMenu.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-
         // Fix the white borders on dropdown
         JPopupMenu popup = newMenu.getPopupMenu();
         popup.setBorder(BorderFactory.createEmptyBorder());
-        popup.setBackground(Utilities.SECONDARY_COLOR);
-        popup.setOpaque(true);
+        Utilities.setPanelColors(popup);
 
         add(newMenu);
         return newMenu;

@@ -18,21 +18,43 @@ public class Utilities {
     //preconfigured Title boarder, just need panel obj and Title name
     public static void applyTitledBorder(JPanel panel, String titleText) {
         TitledBorder border = BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Utilities.SECONDARY_COLOR, 1),
+                BorderFactory.createLineBorder(SECONDARY_COLOR, 1),
                 titleText,
                 TitledBorder.LEFT,
                 TitledBorder.TOP,
                 new Font("SansSerif", Font.ITALIC, 12),
-                Utilities.TEXT_COLOR
+                TEXT_COLOR
         );
         panel.setBorder(border);
-        panel.setBackground(Utilities.PRIMARY_COLOR);
+        panel.setBackground(PRIMARY_COLOR);
         panel.setOpaque(true);
     }
     //used to set the background and text color for any panel jtext obj
     public static void setPanelColors(JComponent component) {
-        component.setBackground(Utilities.PRIMARY_COLOR);
+        component.setBackground(PRIMARY_COLOR);
         component.setOpaque(true);
-        component.setForeground(Utilities.TEXT_COLOR);
+        component.setForeground(TEXT_COLOR);
     }
+    //Sets Title for message builder
+    public static void setTitle(JPanel mainPanel, String titleText) {
+        var titleLabel = new JLabel(titleText, SwingConstants.CENTER);
+        setPanelColors(titleLabel);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD, 16f));
+        titleLabel.setBorder(addPadding(8, 0, 8, 0));
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+    }
+    //creates scroll pane and customizes it
+    public static void setScrollPane(JTextArea JTextArea, JPanel JPanel) {
+        var scrollPane = new JScrollPane(JTextArea);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setOpaque(false);
+        scrollPane.setBackground(TRANSPARENT_COLOR);
+        scrollPane.getViewport().setOpaque(false);
+        scrollPane.getViewport().setBackground(TRANSPARENT_COLOR);
+        scrollPane.setViewportBorder(null);
+
+        JPanel.add(scrollPane, BorderLayout.CENTER);
+    }
+
 }

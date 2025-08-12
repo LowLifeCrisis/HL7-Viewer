@@ -55,37 +55,34 @@ public class GuiBase extends JFrame {
             }
         });
     }
+    //used to display the HL7 message builder
+    public void showMessageBuilderView() {
+        var builderPanel = new MessageBuilderViewer();
+
+        panelRefresher(new MessageBuilderViewer().createMessageBuilderPanel());
+    }
     //Swappable HL7 Viewer Panel
     public void showHl7Viewer() {
+        var outerPanel = new JPanel(new BorderLayout());
+        outerPanel.setOpaque(false);
+        Utilities.setTitle(outerPanel,"HL7 Viewer");
+
         var mainPanel = new JPanel(new GridLayout(1, 2));
         mainPanel.setOpaque(false);
-
         var messagePanel = createMessagePanel();
         var parsedPanel = createParsedViewPanel();
 
         mainPanel.add(messagePanel);
         mainPanel.add(parsedPanel);
-
-        contentPanel.removeAll();
-        contentPanel.add(mainPanel, BorderLayout.CENTER);
-        contentPanel.revalidate();
-        contentPanel.repaint();
-    }
-    //used to display the HL7 message builder
-    public void showMessageBuilderView() {
-        var builderPanel = new MessageBuilderViewer();
-
-        contentPanel.removeAll();
-        contentPanel.add(new MessageBuilderViewer().createMessageBuilderPanel(), BorderLayout.CENTER);
-        contentPanel.revalidate();
-        contentPanel.repaint();
+        outerPanel.add(mainPanel, BorderLayout.CENTER);
+        panelRefresher(outerPanel);
     }
     //text panel that is configured and includes key listener that sends text to be parsed
     private JPanel createMessagePanel() {
         var messagePanel = new JPanel(new BorderLayout());
         Utilities.applyTitledBorder(messagePanel, "HL7 message to Parse");
         messagePanel.setOpaque(false);
-
+        //textbox and listener
         var inputField = new JTextArea();
         inputField.addKeyListener(new KeyAdapter() {
             @Override
@@ -98,7 +95,6 @@ public class GuiBase extends JFrame {
                 }
             }
         });
-
         inputField.setLineWrap(true);
         inputField.setWrapStyleWord(true);
         inputField.setOpaque(false);
@@ -110,12 +106,7 @@ public class GuiBase extends JFrame {
                 BorderFactory.createLineBorder(Utilities.SECONDARY_COLOR, 2),
                 Utilities.addPadding(10, 10, 10, 10)
         ));
-        var scrollPane = new JScrollPane(inputField);
-        scrollPane.setBorder(null);
-        scrollPane.setOpaque(false);
-        scrollPane.getViewport().setOpaque(false);
-
-        messagePanel.add(scrollPane, BorderLayout.CENTER);
+        Utilities.setScrollPane(inputField, messagePanel);
         return messagePanel;
     }
     //method that calls the HL7 panel to display parsed message
@@ -137,5 +128,12 @@ public class GuiBase extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
             });
         }
+    }
+    //removes panels and adds new panels
+    private void panelRefresher(JPanel mainPanel) {
+        contentPanel.removeAll();
+        contentPanel.add(mainPanel, BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
     }
 }

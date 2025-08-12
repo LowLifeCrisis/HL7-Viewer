@@ -41,6 +41,12 @@ public class Hl7TablePanel extends JPanel {
         Utilities.setPanelColors(header);
         header.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Utilities.TERCIARY_COLOR));
 
+        var scrollPane = getJScrollPane();
+
+        add(scrollPane, BorderLayout.CENTER);
+    }
+    //setting scroll pane
+    private JScrollPane getJScrollPane() {
         var scrollPane = new JScrollPane(parsedTable);
         scrollPane.setOpaque(false);
         scrollPane.setBackground(Utilities.TRANSPARENT_COLOR);
@@ -48,8 +54,7 @@ public class Hl7TablePanel extends JPanel {
         scrollPane.getViewport().setOpaque(false);
         scrollPane.getViewport().setBackground(Utilities.TRANSPARENT_COLOR);
         scrollPane.setViewportBorder(null);
-
-        add(scrollPane, BorderLayout.CENTER);
+        return scrollPane;
     }
     //updates the table when new message is to be parsed
     public void updateFromInput(Message hl7Message) {
