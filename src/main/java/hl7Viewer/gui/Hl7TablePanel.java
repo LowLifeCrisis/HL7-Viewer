@@ -10,13 +10,13 @@ import java.awt.*;
 public class Hl7TablePanel extends JPanel {
     private JTable parsedTable;
     private DefaultTableModel tableModel;
-
+    //constructor that provide a few configurations
     public Hl7TablePanel() {
         setLayout(new BorderLayout());
         setOpaque(false);
         initializeTable();
     }
-
+    //where Jtable is created and configured
     private void initializeTable() {
         String[] columnNames = {"Segment-Field", "Value"};
         tableModel = new DefaultTableModel(columnNames, 0) {
@@ -38,9 +38,7 @@ public class Hl7TablePanel extends JPanel {
         parsedTable.getTableHeader().setResizingAllowed(false);
 
         var header = parsedTable.getTableHeader();
-        header.setOpaque(true);
-        header.setBackground(Utilities.PRIMARY_COLOR);
-        header.setForeground(Utilities.TEXT_COLOR);
+        Utilities.setPanelColors(header);
         header.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Utilities.TERCIARY_COLOR));
 
         var scrollPane = new JScrollPane(parsedTable);
@@ -53,7 +51,7 @@ public class Hl7TablePanel extends JPanel {
 
         add(scrollPane, BorderLayout.CENTER);
     }
-
+    //updates the table when new message is to be parsed
     public void updateFromInput(Message hl7Message) {
         tableModel.setRowCount(0); // Clear previous data
 

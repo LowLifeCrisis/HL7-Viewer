@@ -3,51 +3,42 @@ package hl7Viewer.gui;
 import javax.swing.*;
 
 public class MenuBar extends JMenuBar {
+    private final GuiBase guiBase;
+    //constructor that creates and configures MenuBar
+    public MenuBar(GuiBase guiBase) {
+        this.guiBase = guiBase;
 
-    public MenuBar() {
-        this.setBackground(Utilities.SECONDARY_COLOR);
-        this.setOpaque(true);
+        Utilities.setPanelColors(this);
         this.setBorder(BorderFactory.createEmptyBorder());
 
-        createMenuWithItem("File", "Exit", () -> System.exit(0));
-        createMenuWithItem("File", "Test", () -> System.out.println("Test clicked"));
+        createMenuWithItem("View", "HL7 Parser", () -> guiBase.showHl7Viewer());
+        createMenuWithItem("View", "HL7 Builder", () -> guiBase.showMessageBuilderView());
     }
-
+    //allows you to specify menu name, item name and what action to do in menu bar
     private void createMenuWithItem(String menuName, String itemName, Runnable action) {
-        JMenu menu = null;
+        JMenu menu = getOrCreateMenu(menuName);
 
-        if (!menuBarContainsMenu(this, menuName)) {
-            menu = new JMenu(menuName);
-            menu.setForeground(Utilities.TEXT_COLOR);
-            this.add(menu);
-        } else {
-            menu = getMenuByName(this, menuName);
-        }
-
-        if (menu != null && !menuContainsItem(menu, itemName)) {
+        if (!menuContainsItem(menu, itemName)) {
             JMenuItem item = new JMenuItem(itemName);
-            item.setForeground(Utilities.TEXT_COLOR);
-            item.setBackground(Utilities.SECONDARY_COLOR);
-            item.setOpaque(true);
-
-            if (action != null) {
-                item.addActionListener(e -> action.run());
-            }
-
+            Utilities.setPanelColors(item);
+            item.addActionListener(e -> action.run());
             menu.add(item);
         }
     }
-
-    private boolean menuBarContainsMenu(JMenuBar menuBar, String menuName) {
-        for (int i = 0; i < menuBar.getMenuCount(); i++) {
-            JMenu menu = menuBar.getMenu(i);
-            if (menu != null && menuName.equals(menu.getText())) {
-                return true;
+    //Menu name validation within menu bar
+    private JMenu getOrCreateMenu(String menuName) {
+        for (int i = 0; i < getMenuCount(); i++) {
+            JMenu menu = getMenu(i);
+            if (menuName.equals(menu.getText())) {
+                return menu;
             }
         }
-        return false;
+        JMenu newMenu = new JMenu(menuName);
+        newMenu.setForeground(Utilities.TEXT_COLOR);
+        add(newMenu);
+        return newMenu;
     }
-
+    //menu item validation in menu bar
     private boolean menuContainsItem(JMenu menu, String itemName) {
         for (int i = 0; i < menu.getItemCount(); i++) {
             JMenuItem item = menu.getItem(i);
@@ -56,15 +47,5 @@ public class MenuBar extends JMenuBar {
             }
         }
         return false;
-    }
-
-    private JMenu getMenuByName(JMenuBar menuBar, String menuName) {
-        for (int i = 0; i < menuBar.getMenuCount(); i++) {
-            JMenu menu = menuBar.getMenu(i);
-            if (menu != null && menuName.equals(menu.getText())) {
-                return menu;
-            }
-        }
-        return null;
     }
 }

@@ -7,7 +7,7 @@ import ca.uhn.hl7v2.model.Message;
 public class Hl7Parse {
 
      private final Message parsedMessage;
-
+    //called HAPI library to parse message
     public Hl7Parse(String message) throws Exception{
             var context = new DefaultHapiContext();
             //converts \n or \r\n to \r
@@ -19,7 +19,7 @@ public class Hl7Parse {
             parsedMessage = parser.parse(normalizedHL7);
 
     }
-
+    //returns parsed message
     public Message getParsedMessage(){
         return parsedMessage;
     }

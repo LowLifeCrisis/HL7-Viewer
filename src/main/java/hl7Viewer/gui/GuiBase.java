@@ -10,45 +10,53 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-
-public class GuiBase extends JFrame{
+public class GuiBase extends JFrame {
     private Hl7Parse parse;
     private Hl7TablePanel hl7TablePanel;
-
-
-    public GuiBase(){
-        super("Hl7 Parser");
+    private JPanel contentPanel;
+    //Constructor for the Swing window
+    public GuiBase() {
+        super("HL7 Viewer");
 
         setSize(1000, 600);
-        setLocationRelativeTo(null); //loads GUi onto center of screen
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
+        setImageIcon();
+        //used for MenuBar
+        setJMenuBar(new MenuBar(this));
+
+        setWarningOnExit();
+
+        getContentPane().setBackground(Utilities.PRIMARY_COLOR);
+
+        contentPanel = new JPanel(new BorderLayout());
+        contentPanel.setOpaque(false);
+        add(contentPanel, BorderLayout.CENTER);
+
+        showHl7Viewer(); // Show the parser view initially
+    }
+    //sets Icon for GUI
+    private void setImageIcon() {
         var iconURL = getClass().getResource("/images/important.jpg");
         var image = new ImageIcon(iconURL);
         setIconImage(image.getImage());
-        //adding and setting a menubar to the application
-        setJMenuBar(new MenuBar());
-
-        //creates confirmation popup when exiting
+    }
+    //creates popup on Exit
+    private void setWarningOnExit() {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 int option = JOptionPane.showConfirmDialog(GuiBase.this,
-                        "Are you sure you want to exit","Exit", JOptionPane.YES_NO_OPTION);
-                if(option == JOptionPane.YES_OPTION){
+                        "Are you sure you want to exit", "Exit", JOptionPane.YES_NO_OPTION);
+                if (option == JOptionPane.YES_OPTION) {
                     GuiBase.this.dispose();
                 }
             }
         });
-
-
-
-        getContentPane().setBackground(Utilities.PRIMARY_COLOR);
-        //addGuiComponents();
-        addHl7ViewerComponents();
     }
-
-
-    private void addHl7ViewerComponents() {
+    //Swappable HL7 Viewer Panel
+    public void showHl7Viewer() {
         var mainPanel = new JPanel(new GridLayout(1, 2));
         mainPanel.setOpaque(false);
 
@@ -58,19 +66,31 @@ public class GuiBase extends JFrame{
         mainPanel.add(messagePanel);
         mainPanel.add(parsedPanel);
 
-        add(mainPanel, BorderLayout.CENTER);
+        contentPanel.removeAll();
+        contentPanel.add(mainPanel, BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
     }
+    //used to display the HL7 message builder
+    public void showMessageBuilderView() {
+        var builderPanel = new MessageBuilderViewer();
 
-    //used to create the textbox
+        contentPanel.removeAll();
+        contentPanel.add(new MessageBuilderViewer().createMessageBuilderPanel(), BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+    //text panel that is configured and includes key listener that sends text to be parsed
     private JPanel createMessagePanel() {
         var messagePanel = new JPanel(new BorderLayout());
+        Utilities.applyTitledBorder(messagePanel, "HL7 message to Parse");
         messagePanel.setOpaque(false);
 
         var inputField = new JTextArea();
         inputField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if(e.getKeyChar() == KeyEvent.VK_ENTER){
+                if (e.getKeyChar() == KeyEvent.VK_ENTER) {
                     String input = inputField.getText();
                     viewProcessedMsg(input);
                     inputField.setText("");
@@ -96,31 +116,26 @@ public class GuiBase extends JFrame{
         scrollPane.getViewport().setOpaque(false);
 
         messagePanel.add(scrollPane, BorderLayout.CENTER);
-       return messagePanel;
+        return messagePanel;
     }
-
+    //method that calls the HL7 panel to display parsed message
     private JPanel createParsedViewPanel() {
-        //creates JTable which is where we can view the parsed Hl7 message
         hl7TablePanel = new Hl7TablePanel();
-       return hl7TablePanel;
+        return hl7TablePanel;
     }
-
-
-    private void viewProcessedMsg(String input){
+    //where the message is thrown to the parser in a try-catch
+    private void viewProcessedMsg(String input) {
         try {
-
             var parser = new Hl7Parse(input);
-            Message hl7Message =  parser.getParsedMessage();
-
+            Message hl7Message = parser.getParsedMessage();
             hl7TablePanel.updateFromInput(hl7Message);
-
-        }catch (Exception ex){
-            javax.swing.SwingUtilities.invokeLater(() -> {
-                javax.swing.JOptionPane.showMessageDialog(null,
+        } catch (Exception ex) {
+            SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(null,
                         "Failed to parse HL7 message:\n" + ex.getMessage(),
                         "Parsing Error",
-                        javax.swing.JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.ERROR_MESSAGE);
             });
         }
-        }
+    }
 }
