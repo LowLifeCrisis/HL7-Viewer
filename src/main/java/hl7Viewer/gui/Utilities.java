@@ -11,6 +11,7 @@ public class Utilities {
     public static final Color SECONDARY_COLOR = Color.decode("#484444");
     public static final Color TERCIARY_COLOR = Color.decode("#616161");
     public static final Color TEXT_COLOR = Color.decode("#1aab00");
+
     //method that allows you to specify how much padding you want
     public static EmptyBorder addPadding(int top, int left, int bottom, int right ){
         return new EmptyBorder(top, left, bottom, right);
@@ -65,16 +66,17 @@ public class Utilities {
     public static void setTextBox(JTextArea inputField, boolean isTransparentBackground, boolean isOpaque)  {
         inputField.setLineWrap(true);
         inputField.setWrapStyleWord(true);
-        if (isOpaque){
+
+        if (isOpaque)
             inputField.setOpaque(true);
-        }
         else {inputField.setOpaque(false);}
-        if (isTransparentBackground){
+
+        if (isTransparentBackground)
             inputField.setBackground(TRANSPARENT_COLOR);
-        }
-        else{ inputField.setBackground(PRIMARY_COLOR);}
+        else { inputField.setBackground(PRIMARY_COLOR);}
         inputField.setForeground(TEXT_COLOR);
         inputField.setCaretColor(TEXT_COLOR);
+
         inputField.setFont(new Font("Monospaced", Font.PLAIN, 12));
     }
 }

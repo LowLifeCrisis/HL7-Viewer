@@ -7,7 +7,7 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        //used to call the GUI
+        // Runs the GUI in Event Dispatch Thread (EDT)
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
