@@ -1,6 +1,5 @@
 package hl7Viewer.gui;
 
-import ca.uhn.hl7v2.model.Message;
 import hl7Viewer.nonGui.parser.Hl7Parse;
 
 import javax.swing.*;
@@ -12,9 +11,8 @@ import java.awt.event.WindowEvent;
 
 public class GuiBase extends JFrame {
     private Hl7Parse parse;
-    private Hl7TablePanel hl7TablePanel;
-    private JPanel contentPanel;
-    //Constructor for the Swing window
+    private Hl7TableViewer hl7TableViewer;
+    private JPanel contentPanel;//Constructor for the Swing window
     public GuiBase() {
         super("HL7 Viewer");
 
@@ -23,11 +21,14 @@ public class GuiBase extends JFrame {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         setImageIcon();
+
         //used for MenuBar
-        setJMenuBar(new MenuBar(this));
+        var menuBar1 = new MenuBar(this);
+        setJMenuBar(menuBar1);
+        menuBar1.createMenuWithItem("View", "HL7 Parser", this::showHl7Viewer);
+        menuBar1.createMenuWithItem("View", "HL7 Builder", this::showMessageBuilderView);
 
         setWarningOnExit();
-
         getContentPane().setBackground(Utilities.PRIMARY_COLOR);
 
         contentPanel = new JPanel(new BorderLayout());
@@ -35,6 +36,8 @@ public class GuiBase extends JFrame {
         add(contentPanel, BorderLayout.CENTER);
 
         showHl7Viewer(); // Show the parser view initially
+
+
     }
     //sets Icon for GUI
     private void setImageIcon() {
@@ -86,8 +89,8 @@ public class GuiBase extends JFrame {
         var inputField = new JTextArea();
         inputField.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
-                if (e.getKeyChar() == KeyEvent.VK_ENTER) {
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER && (e.isControlDown())) {
                     String input = inputField.getText();
                     viewProcessedMsg(input);
                     inputField.setText("");
@@ -105,15 +108,15 @@ public class GuiBase extends JFrame {
     }
     //method that calls the HL7 panel to display parsed message
     private JPanel createParsedViewPanel() {
-        hl7TablePanel = new Hl7TablePanel();
-        return hl7TablePanel;
+        hl7TableViewer = new Hl7TableViewer();
+        return hl7TableViewer;
     }
     //where the message is thrown to the parser in a try-catch
     private void viewProcessedMsg(String input) {
         try {
             var parser = new Hl7Parse(input);
-            Message hl7Message = parser.getParsedMessage();
-            hl7TablePanel.updateFromInput(hl7Message);
+           // Message hl7Message = parser.getParsedMessage();
+           // hl7TablePanel.updateFromInput(hl7Message);
         } catch (Exception ex) {
             SwingUtilities.invokeLater(() -> {
                 JOptionPane.showMessageDialog(null,

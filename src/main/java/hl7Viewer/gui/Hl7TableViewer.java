@@ -1,18 +1,17 @@
 package hl7Viewer.gui;
 
 import ca.uhn.hl7v2.model.Message;
-import hl7Viewer.nonGui.parser.Hl7FieldIterator;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class Hl7TablePanel extends JPanel {
+public class Hl7TableViewer extends JPanel {
     private JTable parsedTable;
     private DefaultTableModel tableModel;
     //constructor that provide a few configurations
-    public Hl7TablePanel() {
+    public Hl7TableViewer() {
         setLayout(new BorderLayout());
         setOpaque(false);
         initializeTable();
@@ -59,20 +58,16 @@ public class Hl7TablePanel extends JPanel {
         return scrollPane;
     }
     //updates the table when new message is to be parsed
-    public void updateFromInput(Message hl7Message) {
+    public void displayParsedHl7(Message hl7Message) {
         tableModel.setRowCount(0); // Clear previous data
 
         try {
-            Object[][] tableData = Hl7FieldIterator.getSegmentFieldTableData(hl7Message);
 
-            for (Object[] row : tableData) {
-                tableModel.addRow(row);
-            }
 
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this,
-                    "Failed to extract HL7 fields:\n" + e.getMessage(),
+                    "Failed to display HL7 fields:\n" + e.getMessage(),
                     "Parsing Error",
                     JOptionPane.ERROR_MESSAGE);
         }

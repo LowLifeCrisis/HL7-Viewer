@@ -10,12 +10,9 @@ public class MenuBar extends JMenuBar {
 
         Utilities.setPanelColors(this);
         this.setBorder(BorderFactory.createLineBorder(Utilities.SECONDARY_COLOR, 2));
-
-        createMenuWithItem("View", "HL7 Parser", () -> guiBase.showHl7Viewer());
-        createMenuWithItem("View", "HL7 Builder", () -> guiBase.showMessageBuilderView());
     }
     //allows you to specify menu name, item name and what action to do in menu bar
-    private void createMenuWithItem(String menuName, String itemName, Runnable action) {
+    public void createMenuWithItem(String menuName, String itemName, Runnable action) {
         JMenu menu = getOrCreateMenu(menuName);
 
         if (!menuContainsItem(menu, itemName)) {
