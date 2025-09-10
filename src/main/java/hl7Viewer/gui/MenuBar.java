@@ -8,6 +8,7 @@ public class MenuBar extends JMenuBar {
     public MenuBar(GuiBase guiBase) {
         this.guiBase = guiBase;
 
+
         Utilities.setPanelColors(this);
         this.setBorder(BorderFactory.createLineBorder(Utilities.SECONDARY_COLOR, 2));
     }

@@ -3,7 +3,7 @@ package hl7Viewer.gui;
 import javax.swing.*;
 import java.awt.*;
 
-public class MessageBuilderViewer {
+public class HL7MessageBuilder {
 
     private JTextArea _outputArea;
     //main panel creation
