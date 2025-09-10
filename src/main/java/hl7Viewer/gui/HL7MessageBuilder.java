@@ -10,7 +10,7 @@ public class HL7MessageBuilder {
     public JPanel createMessageBuilderPanel() {
         var mainPanel = new JPanel(new BorderLayout());
         // Title at the top
-        Utilities.setTitle(mainPanel, "HL7 Message Builder");
+        Utilities.createAndSetTitle(mainPanel, "HL7 Message Builder");
         // Split panel with two columns
         var splitPanel = new JPanel(new GridLayout(1, 2));
         splitPanel.add(messageCustomizationPanel());
@@ -93,7 +93,7 @@ public class HL7MessageBuilder {
         _outputArea.setEditable(false);
         _outputArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
 
-       Utilities.createScrollPane(_outputArea, messagePanel);
+       Utilities.createAndSetScrollPane(_outputArea, messagePanel);
 
         return messagePanel;
     }

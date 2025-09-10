@@ -8,7 +8,6 @@ import java.awt.event.WindowEvent;
 
 
 public class GuiBase extends JFrame {
-    private HL7TableViewer hl7TableViewer;
     private final JPanel contentPanel;
     
     public GuiBase() {
@@ -18,7 +17,7 @@ public class GuiBase extends JFrame {
         setAppOnCenterOfScreen();
         setImageIcon();
         setWarningOnExit();
-        //used for MenuBar
+
         var menuBar1 = new MenuBar(this);
         menuBar1.createMenuWithItem("View", "HL7 Parser", this::showHl7Viewer);
         menuBar1.createMenuWithItem("View", "HL7 Builder", this::showMessageBuilderView);
@@ -34,15 +33,14 @@ public class GuiBase extends JFrame {
     }
 
     private void setImageIcon() {
-        var iconURL = getClass().getResource("/images/important.jpg");
+        final var iconURL = getClass().getResource("/images/important.jpg");
         assert iconURL != null;
-        var image = new ImageIcon(iconURL);
+        final var image = new ImageIcon(iconURL);
         setIconImage(image.getImage());
     }
 
     private void setWarningOnExit() {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -86,7 +84,7 @@ public class GuiBase extends JFrame {
     }
     
     private boolean clickedYes() {
-        int option = JOptionPane.showConfirmDialog(GuiBase.this,
+       final int option = JOptionPane.showConfirmDialog(GuiBase.this,
                 "Are you sure you want to exit",
                 "Exit", JOptionPane.YES_NO_OPTION);
         return option == JOptionPane.YES_OPTION;

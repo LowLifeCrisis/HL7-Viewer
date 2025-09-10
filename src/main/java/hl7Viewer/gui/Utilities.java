@@ -37,7 +37,7 @@ public class Utilities {
         component.setForeground(TEXT_COLOR);
     }
     //Sets Title for message builder
-    public static void setTitle(JPanel mainPanel, String titleText) {
+    public static void createAndSetTitle(JPanel mainPanel, String titleText) {
         var titleLabel = new JLabel(titleText, SwingConstants.CENTER);
         setPanelColors(titleLabel);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
@@ -46,7 +46,7 @@ public class Utilities {
         mainPanel.add(titleLabel, BorderLayout.NORTH);
     }
     //creates scroll pane and customizes it
-    public static void createScrollPane(JTextArea JTextArea, JPanel JPanel) {
+    public static void createAndSetScrollPane(JTextArea JTextArea, JPanel JPanel) {
         var scrollPane = new JScrollPane(JTextArea);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.setOpaque(false);
@@ -67,13 +67,10 @@ public class Utilities {
         inputField.setLineWrap(true);
         inputField.setWrapStyleWord(true);
 
-        if (isOpaque)
-            inputField.setOpaque(true);
-        else {inputField.setOpaque(false);}
+        inputField.setOpaque(isOpaque);
 
-        if (isTransparentBackground)
-            inputField.setBackground(TRANSPARENT_COLOR);
-        else { inputField.setBackground(PRIMARY_COLOR);}
+        inputField.setBackground(isTransparentBackground ? TRANSPARENT_COLOR : PRIMARY_COLOR);
+
         inputField.setForeground(TEXT_COLOR);
         inputField.setCaretColor(TEXT_COLOR);
 

@@ -18,7 +18,7 @@ public class HL7ParseViewer {
     public JPanel createPanel() {
         JPanel outerPanel = new JPanel(new BorderLayout());
         outerPanel.setOpaque(false);
-        Utilities.setTitle(outerPanel, "HL7 Viewer");
+        Utilities.createAndSetTitle(outerPanel, "HL7 Viewer");
 
         JPanel mainPanel = new JPanel(new GridLayout(1, 2));
         mainPanel.setOpaque(false);
@@ -57,7 +57,7 @@ public class HL7ParseViewer {
             }
         });
 
-        Utilities.createScrollPane(inputField, messagePanel);
+        Utilities.createAndSetScrollPane(inputField, messagePanel);
         return messagePanel;
     }
 
