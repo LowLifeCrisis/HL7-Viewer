@@ -47,7 +47,7 @@ public class GuiBase extends JFrame {
                 final int option = JOptionPane.showConfirmDialog(GuiBase.this,
                         "Are you sure you want to exit",
                         "Exit", JOptionPane.YES_NO_OPTION);
-                if (clickedYes(option)) {
+                if (ifClickedYes(option)) {
                     GuiBase.this.dispose();
                 }
             }
@@ -85,7 +85,7 @@ public class GuiBase extends JFrame {
         contentPanel.repaint();
     }
     
-    private boolean clickedYes(int option) {
+    private boolean ifClickedYes(int option) {
         return option == JOptionPane.YES_OPTION;
     }
 }
