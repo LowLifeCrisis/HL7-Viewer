@@ -11,7 +11,7 @@ public class Main {
     private static void runSwingGuiOnEdt() {
         var program = new GuiBase();
         SwingUtilities.invokeLater(
-                () ->  program.setVisible(true)
+                 () ->  program.setVisible(true)
         );
     }
 }
