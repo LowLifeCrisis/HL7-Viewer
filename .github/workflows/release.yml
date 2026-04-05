@@ -2,8 +2,8 @@ name: Build HL7 Viewer
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*.*.*'
   pull_request:
 
 jobs:
