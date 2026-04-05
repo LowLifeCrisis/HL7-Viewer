@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class MenuBar extends JMenuBar {
 
-    public MenuBar(GuiBase guiBase) {
+    public MenuBar(MainForm mainForm) {
         Utilities.setPanelColors(this);
         this.setBorder(BorderFactory.createLineBorder(Utilities.SECONDARY_COLOR, 2));
     }

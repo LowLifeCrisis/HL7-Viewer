@@ -7,10 +7,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 
-public class GuiBase extends JFrame {
+public class MainForm extends JFrame {
     private final JPanel contentPanel;
 
-    public GuiBase() {
+    public MainForm() {
 
         setTitle("Hl7 Viewer");
         setSize(1000, 600);
@@ -61,11 +61,11 @@ public class GuiBase extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                final int option = JOptionPane.showConfirmDialog(GuiBase.this,
+                final int option = JOptionPane.showConfirmDialog(MainForm.this,
                         "Are you sure you want to exit",
                         "Exit", JOptionPane.YES_NO_OPTION);
                 if (ifClickedYes(option)) {
-                    GuiBase.this.dispose();
+                    MainForm.this.dispose();
                 }
             }
         });
@@ -87,8 +87,8 @@ public class GuiBase extends JFrame {
 
 
     public void showHl7Viewer() {
-        JPanel parserPanel =  (new HL7ParseViewer().createPanel());
-        final var TablePanel = new HL7TableViewer();
+        final JPanel parserPanel =  (new HL7ParseViewer().createPanel());
+        //final var TablePanel = new HL7TableViewer();
         panelRefresher(parserPanel);
 
     }
@@ -108,7 +108,7 @@ public class GuiBase extends JFrame {
     }
 
 
-    private boolean ifClickedYes(int option) {
+    private boolean ifClickedYes(final int option) {
         return option == JOptionPane.YES_OPTION;
     }
 }

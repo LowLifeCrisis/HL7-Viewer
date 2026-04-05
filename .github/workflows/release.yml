@@ -1,11 +1,11 @@
-name: Build HL7 Viewer
+name: Build Executables
 
 on:
   push:
     branches:
       - main
-   # tags:
-      #- 'v*.*.*'
+#    tags:
+#      - 'v*.*.*'
   pull_request:
 
 jobs:

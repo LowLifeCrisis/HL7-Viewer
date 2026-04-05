@@ -1,6 +1,6 @@
 package hl7Viewer;
 
-import hl7Viewer.gui.GuiBase;
+import hl7Viewer.gui.MainForm;
 
 import javax.swing.SwingUtilities;
 
@@ -11,7 +11,7 @@ public class Main {
 
 //   Runs the GUI in Event Dispatch Thread (EDT)
     private static void runSwingGuiOnEdt() {
-        var program = new GuiBase();
+        final var program = new MainForm();
         SwingUtilities.invokeLater(
                 () ->  program.setVisible(true)
         );

@@ -14,8 +14,8 @@ public class HL7ParseViewer {
 
 
     public JPanel createPanel() {
-        var outerPanel = createAndSetHl7ViewerPanel();
-        var mainPanel = createAndSetInputAndOutputPanel();
+        final var outerPanel = createAndSetHl7ViewerPanel();
+        final var mainPanel = createAndSetInputAndOutputPanel();
 
         outerPanel.add(mainPanel, BorderLayout.CENTER);
 
@@ -24,7 +24,7 @@ public class HL7ParseViewer {
 
 
     private static JPanel createAndSetHl7ViewerPanel() {
-        var hl7ViewerPanel = new JPanel(new BorderLayout());
+        final var hl7ViewerPanel = new JPanel(new BorderLayout());
         hl7ViewerPanel.setOpaque(false);
         Utilities.createAndSetTitle(hl7ViewerPanel, "HL7 Viewer");
 
@@ -32,12 +32,37 @@ public class HL7ParseViewer {
     }
 
 
+    private static void showErrorMessage(String exceptionMessage) {
+        SwingUtilities.invokeLater(() -> {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Failed to parse HL7 message:\n" + exceptionMessage,
+                    "Parsing Error",
+                    JOptionPane.ERROR_MESSAGE);
+        });
+    }
+
+
+    private static boolean clrTextIfEmpty(JTextArea messageTextBox) {
+        if (!messageTextBox.getText().trim().isEmpty()) {
+            messageTextBox.setText("");
+            return true;
+        }
+        return false;
+    }
+
+
+    private static boolean pressedCtrlAndEnter(KeyEvent e) {
+        return e.isControlDown() && e.getKeyCode() == KeyEvent.VK_ENTER;
+    }
+
+
     private JPanel createAndSetInputAndOutputPanel() {
-        var inputAndOutputPanel = new JPanel(new GridLayout(1, 2));
+        final var inputAndOutputPanel = new JPanel(new GridLayout(1, 2));
         inputAndOutputPanel.setOpaque(false);
 
         hl7TableViewer = new HL7TableViewer();
-        var messagePanel = createMessageInputPanel();
+        final var messagePanel = createMessageInputPanel();
 
         inputAndOutputPanel.add(messagePanel);
         inputAndOutputPanel.add(hl7TableViewer);
@@ -53,19 +78,34 @@ public class HL7ParseViewer {
 
         final var messageTextBox = createAndSetMessageTextBox();
         addCtrlEnterKeyListener(messageTextBox);
-
         Utilities.createAndSetScrollPane(messageTextBox, messagePanel);
 
-        final var parseButton = createParseBtn(messageTextBox);
-        final var clearButton = createClearBtn(messageTextBox);
 
-        final var buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        buttonPanel.setOpaque(false);
-        buttonPanel.add(clearButton);
-        buttonPanel.add(parseButton);
+//        final var buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+//        buttonPanel.setOpaque(false);
+//        buttonPanel.add(hl7TableViewer.createClrTableBtn());
+//        buttonPanel.add(createClrMsgBtn(messageTextBox));
+//        buttonPanel.add(createParseBtn(messageTextBox));
+//        buttonPanel.add(hl7TableViewer.createCpyTableBtn());
+//        messagePanel.add(buttonPanel,BorderLayout.SOUTH);
 
-        messagePanel.add(buttonPanel,BorderLayout.SOUTH);
+        final var btnPanel = new JPanel();
+        btnPanel.setLayout(new BoxLayout(btnPanel, BoxLayout.Y_AXIS));
+        btnPanel.setOpaque(false);
 
+        final var topBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 2));
+        topBtns.setOpaque(false);
+        topBtns.add(createParseBtn(messageTextBox));
+        topBtns.add(hl7TableViewer.createCpyTableBtn());
+        btnPanel.add(topBtns);
+
+        final var botBtns = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 2));
+        botBtns.setOpaque(false);
+        botBtns.add(createClrMsgBtn(messageTextBox));
+        botBtns.add(hl7TableViewer.createClrTableBtn());
+        btnPanel.add(botBtns);
+
+        messagePanel.add(btnPanel, BorderLayout.SOUTH);
         return messagePanel;
     }
 
@@ -85,28 +125,31 @@ public class HL7ParseViewer {
 
 
     private JButton createParseBtn(final JTextArea messageTextBox) {
-        final JButton parseButton = new JButton("Parse Message");
+        final JButton parseButton = new JButton("Parse HL7 ");
 
         parseButton.setOpaque(true);
         parseButton.setBorderPainted(false);
         Utilities.setButtonColors(parseButton);
-        parseButton.addActionListener(e -> {
-            handleMessage(messageTextBox);
-        } );
+        parseButton.addActionListener(
+                e -> handleMessage(messageTextBox));
 
         return parseButton;
     }
 
 
-    private JButton createClearBtn(final JTextArea messageTextBox) {
+    private JButton createClrMsgBtn(final JTextArea messageTextBox) {
         final JButton clearButton = new JButton("Clear Text");
 
         clearButton.setOpaque(true);
         clearButton.setBorderPainted(false);
         Utilities.setButtonColors(clearButton);
-        clearButton.addActionListener(e -> {
-            messageTextBox.setText("");
-        });
+        clearButton.addActionListener(
+                e ->  {
+                    if (!clrTextIfEmpty(messageTextBox)) {
+                        JOptionPane.showMessageDialog(hl7TableViewer, "Textbox is already empty.");
+                        return;
+                    }
+                });
 
         return clearButton;
     }
@@ -131,11 +174,6 @@ public class HL7ParseViewer {
     }
 
 
-    private static boolean pressedCtrlAndEnter(KeyEvent e) {
-        return e.isControlDown() && e.getKeyCode() == KeyEvent.VK_ENTER;
-    }
-
-
     private void parseAndDisplay(String input) {
         try {
 
@@ -146,17 +184,6 @@ public class HL7ParseViewer {
         } catch (Exception ex) {
             showErrorMessage(ex.getMessage());
         }
-    }
-
-
-    private static void showErrorMessage(String exceptionMessage) {
-        SwingUtilities.invokeLater(() -> {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Failed to parse HL7 message:\n" + exceptionMessage,
-                    "Parsing Error",
-                    JOptionPane.ERROR_MESSAGE);
-        });
     }
 }
 
@@ -173,6 +200,108 @@ class HL7TableViewer extends JPanel {
     }
 
 
+    public void displayMessage(final HL7Message hl7Message) {
+        clearTable();
+
+        if (!displayEachRow(hl7Message)) {
+            JOptionPane.showMessageDialog(this,
+                    "Failed to display HL7 fields.",
+                    "Parsing Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public JButton createClrTableBtn() {
+        final var clearBtn = new JButton("Clear Table");
+
+        clearBtn.setOpaque(true);
+        clearBtn.setBorderPainted(false);
+        Utilities.setButtonColors(clearBtn);
+
+        clearBtn.addActionListener(e ->  {
+            if (jTable.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(this, "Table is already Empty.");
+                return;
+            }
+            clearTable();
+        });
+
+        return clearBtn;
+    }
+
+
+    public JButton createCpyTableBtn() {
+        final var cpyBtn = new JButton("Copy Table");
+
+        cpyBtn.setOpaque(true);
+        cpyBtn.setBorderPainted(false);
+        Utilities.setButtonColors(cpyBtn);
+
+        cpyBtn.addActionListener( e -> copyTableToClipboard());
+        return cpyBtn;
+    }
+
+
+    private static StringBuilder calculateRowIndex(
+            final String segHeader,
+            final int _fieldIndex,
+            final HL7Field field,
+            final int _repIndex,
+            final HL7Repetition repetition,
+            final int _compIndex,
+            final HL7Component comp,
+            final int _subcomponentIndex) {
+        final StringBuilder index   = new StringBuilder(segHeader);
+
+        final int fieldIndex = (segHeader.equals("MSH") && _fieldIndex != 0)
+                ? _fieldIndex + 1 : _fieldIndex;
+
+        index.append("-").append(fieldIndex);
+
+        if(field.hasRepetition())
+            index.append(".").append(_repIndex + 1);
+
+        if(repetition.hasComponent())
+            index.append(".").append(_compIndex + 1);
+
+        if(comp.hasSubcomponent())
+            index.append(".").append(_subcomponentIndex + 1);
+
+        return index;
+    }
+
+
+    private void copyTableToClipboard() {
+        if (jTable.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(
+                    this, "Table is empty. Please press after parsing message");
+            return;
+        }
+
+        final var contents = new StringBuilder();
+
+        for (var i = 0; i < jTable.getColumnCount(); i++ )
+            contents.append(jTable.getColumnName(i)).append("\t");
+
+        contents.append("\n");
+
+        for (var i = 0; i < jTable.getRowCount(); i++) {
+
+            for (var j = 0; j < jTable.getColumnCount(); j++) {
+                final var value = jTable.getValueAt(i, j);
+                contents.append(value.toString()).append("\t");
+            }
+            contents.append("\n");
+        }
+
+        Toolkit.getDefaultToolkit()
+                .getSystemClipboard()
+                .setContents(
+                        new java.awt.datatransfer.StringSelection(
+                                contents.toString()), null);
+    }
+
+
     private void initializeTable() {
 
         final String[] columnNames = {"Index", "Value"};
@@ -185,6 +314,7 @@ class HL7TableViewer extends JPanel {
         };
 
         jTable = new JTable(hl7TableData);
+        jTable.getColumnModel().getColumn(1).setCellRenderer(new TextRenderer());
         jTable.setOpaque(false);
         jTable.setBackground(Utilities.TRANSPARENT_COLOR);
         jTable.setForeground(Utilities.TEXT_COLOR);
@@ -206,7 +336,7 @@ class HL7TableViewer extends JPanel {
 
 
     private JScrollPane getJScrollPane() {
-        var scrollPane = new JScrollPane(jTable);
+        final var scrollPane = new JScrollPane(jTable);
         scrollPane.setOpaque(false);
         scrollPane.setBackground(Utilities.TRANSPARENT_COLOR);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -216,16 +346,8 @@ class HL7TableViewer extends JPanel {
         return scrollPane;
     }
 
-
-    public void displayMessage(final HL7Message hl7Message) {
+    private void clearTable() {
         hl7TableData.setRowCount(0);
-
-        if (!displayEachRow(hl7Message)) {
-            JOptionPane.showMessageDialog(this,
-                    "Failed to display HL7 fields.",
-                    "Parsing Error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
     }
 
 
@@ -262,35 +384,6 @@ class HL7TableViewer extends JPanel {
         }
 
         return hl7TableData.getRowCount() != 0;
-    }
-
-
-    private static StringBuilder calculateRowIndex(
-            final String segHeader,
-            final int _fieldIndex,
-            final HL7Field field,
-            final int _repIndex,
-            final HL7Repetition repetition,
-            final int _compIndex,
-            final HL7Component comp,
-            final int _subcomponentIndex) {
-        final StringBuilder index   = new StringBuilder(segHeader);
-
-        final int fieldIndex = (segHeader.equals("MSH") && _fieldIndex != 0)
-                ? _fieldIndex + 1 : _fieldIndex;
-
-        index.append("-").append(fieldIndex);
-
-        if(field.hasRepetition())
-            index.append(".").append(_repIndex + 1);
-
-        if(repetition.hasComponent())
-            index.append(".").append(_compIndex + 1);
-
-        if(comp.hasSubcomponent())
-            index.append(".").append(_subcomponentIndex + 1);
-
-        return index;
     }
 
 

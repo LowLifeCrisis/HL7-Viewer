@@ -5,6 +5,7 @@ out/
 target/
 *.class
 .idea
+*.iml
 
 ### Eclipse ###
 .apt_generated
@@ -30,5 +31,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-.dmg
+*.dmg
+*.app
 **/src/java/hl7Viewer/gui/HL7MessageBuilder.java

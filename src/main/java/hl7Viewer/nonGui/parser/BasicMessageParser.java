@@ -1,7 +1,7 @@
 package hl7Viewer.nonGui.parser;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 
 public class BasicMessageParser implements IMessageParser {
     @Override
@@ -12,8 +12,9 @@ public class BasicMessageParser implements IMessageParser {
         if (message.isEmpty())
             throw new IllegalArgumentException("Invalid Message: message cannot be empty");
 
-        if(!message.toUpperCase().contains("MSH"))
-            throw new IllegalArgumentException("Invalid Message: message doesn't contain MSH");
+        if(!message.substring(0,3).toUpperCase().contains("MSH"))
+            throw new IllegalArgumentException(
+                    "Invalid Message: message doesn't contain MSH as first segment");
 
         message = HL7Message.sanitizeEnterChar(message);
 
@@ -27,7 +28,8 @@ public class BasicMessageParser implements IMessageParser {
 
         for (var segment : segments) {
             final var fields = segment.split("\\" + fieldSeparator);
-            final var hl7Seg = new HL7Segment(fields[0], new ArrayList<>());
+            final var segHeader = fields[0].toUpperCase();
+            final var hl7Seg = new HL7Segment(segHeader, new ArrayList<>());
             var fieldIndex = 0;
 
             if (isMshSeg(hl7Seg)) {
@@ -55,8 +57,13 @@ public class BasicMessageParser implements IMessageParser {
                     for (var component : components) {
 
                         final var hl7Comp = new HL7Component(new ArrayList<>());
-                        final var subcomponents = component.split("\\" + subcomponentSeparator);
-                        Collections.addAll(hl7Comp.getSubcomponentList(), subcomponents);
+//                        final var subcomponents = component.split("\\" + subcomponentSeparator);
+//                        Collections.addAll(hl7Comp.getSubcomponentList(), subcomponents);
+                        Arrays.stream(component.split("\\" + subcomponentSeparator))
+                                .map(String::toUpperCase)
+                                .map(String::trim)
+                                .forEach(hl7Comp.getSubcomponentList()::add);
+
                         hl7Repetition.addComponent(hl7Comp);
                     }
                     hl7field.addRepetition(hl7Repetition);
