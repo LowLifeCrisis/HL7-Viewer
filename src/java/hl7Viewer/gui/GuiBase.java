@@ -92,11 +92,6 @@ public class GuiBase extends JFrame {
 
     }
 
-    //used to display the HL7 message builder
-    public void showMessageBuilderView() {
-        var builderPanel = new HL7MessageBuilder();
-        panelRefresher(new HL7MessageBuilder().createMessageBuilderPanel());
-    }
 
     //removes panels and adds new panels
     private void panelRefresher(JPanel mainPanel) {
