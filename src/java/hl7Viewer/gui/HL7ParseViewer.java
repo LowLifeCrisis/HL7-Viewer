@@ -1,7 +1,6 @@
 package hl7Viewer.gui;
 
-import hl7Viewer.nonGui.parser.HL7Node;
-import hl7Viewer.nonGui.parser.HL7Parser;
+import hl7Viewer.nonGui.parser.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -9,11 +8,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HL7ParseViewer {
     private HL7TableViewer hl7TableViewer;
+
 
     public JPanel createPanel() {
         var outerPanel = createAndSetHl7ViewerPanel();
@@ -24,6 +22,7 @@ public class HL7ParseViewer {
         return outerPanel;
     }
 
+
     private static JPanel createAndSetHl7ViewerPanel() {
         var hl7ViewerPanel = new JPanel(new BorderLayout());
         hl7ViewerPanel.setOpaque(false);
@@ -31,6 +30,7 @@ public class HL7ParseViewer {
 
         return hl7ViewerPanel;
     }
+
 
     private JPanel createAndSetInputAndOutputPanel() {
         var inputAndOutputPanel = new JPanel(new GridLayout(1, 2));
@@ -45,6 +45,7 @@ public class HL7ParseViewer {
         return inputAndOutputPanel;
     }
 
+
     private JPanel createMessageInputPanel() {
         var messagePanel = new JPanel(new BorderLayout());
         messagePanel.setOpaque(false);
@@ -58,21 +59,26 @@ public class HL7ParseViewer {
         return messagePanel;
     }
 
+
     private JTextArea  createAndSetMessageTextBox() {
         var messageTextBox = new JTextArea();
         Utilities.setTextBox(messageTextBox, true, false);
-        messageTextBox.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Utilities.SECONDARY_COLOR, 2),
-                Utilities.addPadding(10, 10, 10, 10)
+
+        messageTextBox.setBorder(
+                BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(Utilities.SECONDARY_COLOR, 2),
+                    Utilities.addPadding(10, 10, 10, 10)
         ));
 
         return messageTextBox;
     }
 
+
     private void addCtrlEnterKeyListener(JTextArea messageTextBox) {
         messageTextBox.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+
                 if (pressedCtrlAndEnter(e)) {
                     handleMessageAndClearTextbox(messageTextBox);
                     e.consume();
@@ -81,33 +87,35 @@ public class HL7ParseViewer {
         });
     }
 
+
     private void handleMessageAndClearTextbox(JTextArea textBox) {
         parseAndDisplay(textBox.getText());
-
-        textBox.setText("");
+        //textBox.setText("");
     }
+
 
     private static boolean pressedCtrlAndEnter(KeyEvent e) {
-        return e.isControlDown() && e.getKeyCode() == KeyEvent.VK_ENTER ;
+        return e.isControlDown() && e.getKeyCode() == KeyEvent.VK_ENTER;
     }
+
 
     private void parseAndDisplay(String input) {
         try {
-            HL7Parser parser = new HL7Parser();
-            HL7Node root = parser.parse(input);
 
-            List<String[]> tableData = new ArrayList<>();
-            root.flatten(tableData);
-            hl7TableViewer.displayParsedHl7((ArrayList<String[]>) tableData);
-
+            IMessageParser parser = new BasicMessageParser();
+            var parsedMsg = new HL7Message();
+            parsedMsg = parser.parse(input);
+            hl7TableViewer.displayMessage(parsedMsg);
         } catch (Exception ex) {
             showErrorMessage(ex.getMessage());
         }
     }
 
+
     private static void showErrorMessage(String exceptionMessage) {
         SwingUtilities.invokeLater(() -> {
-            JOptionPane.showMessageDialog(null,
+            JOptionPane.showMessageDialog(
+                    null,
                     "Failed to parse HL7 message:\n" + exceptionMessage,
                     "Parsing Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -116,10 +124,10 @@ public class HL7ParseViewer {
 }
 
 
-
 class HL7TableViewer extends JPanel {
-    private JTable hl7Tablecomponent;
+    private JTable jTable;
     private DefaultTableModel hl7TableData;
+
 
     public HL7TableViewer() {
         setLayout(new BorderLayout());
@@ -127,8 +135,11 @@ class HL7TableViewer extends JPanel {
         initializeTable();
     }
 
+
     private void initializeTable() {
-        String[] columnNames = {"Segment-Field", "Value"};
+
+        final String[] columnNames = {"Index", "Value"};
+
         hl7TableData = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -136,28 +147,29 @@ class HL7TableViewer extends JPanel {
             }
         };
 
-        hl7Tablecomponent = new JTable(hl7TableData);
-        hl7Tablecomponent.setOpaque(false);
-        hl7Tablecomponent.setBackground(Utilities.TRANSPARENT_COLOR);
-        hl7Tablecomponent.setForeground(Utilities.TEXT_COLOR);
-        hl7Tablecomponent.setGridColor(Utilities.TERCIARY_COLOR);
-        hl7Tablecomponent.setFont(new Font("SansSerif", Font.PLAIN, 12));
-        hl7Tablecomponent.setRowHeight(22);
-        hl7Tablecomponent.setFillsViewportHeight(true);
-        setupHeaderRenderer(hl7Tablecomponent);
+        jTable = new JTable(hl7TableData);
+        jTable.setOpaque(false);
+        jTable.setBackground(Utilities.TRANSPARENT_COLOR);
+        jTable.setForeground(Utilities.TEXT_COLOR);
+        jTable.setGridColor(Utilities.TERCIARY_COLOR);
+        jTable.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        jTable.setRowHeight(22);
+        jTable.setFillsViewportHeight(true);
+        setupHeaderRenderer(jTable);
 
-        var header = hl7Tablecomponent.getTableHeader();
+        final var header = jTable.getTableHeader();
         header.setReorderingAllowed(false);
         header.setResizingAllowed(false);
         header.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Utilities.TERCIARY_COLOR));
         Utilities.setPanelColors(header);
 
-        var scrollPane = getJScrollPane();
+        final var scrollPane = getJScrollPane();
         add(scrollPane, BorderLayout.CENTER);
     }
 
+
     private JScrollPane getJScrollPane() {
-        var scrollPane = new JScrollPane(hl7Tablecomponent);
+        var scrollPane = new JScrollPane(jTable);
         scrollPane.setOpaque(false);
         scrollPane.setBackground(Utilities.TRANSPARENT_COLOR);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -167,9 +179,11 @@ class HL7TableViewer extends JPanel {
         return scrollPane;
     }
 
-    public void displayParsedHl7(ArrayList<String[]> tableData) {
+
+    public void displayMessage(final HL7Message hl7Message) {
         hl7TableData.setRowCount(0);
-        if (!displayEachRow(tableData)) {
+
+        if (!displayEachRow(hl7Message)) {
             JOptionPane.showMessageDialog(this,
                     "Failed to display HL7 fields.",
                     "Parsing Error",
@@ -177,12 +191,71 @@ class HL7TableViewer extends JPanel {
         }
     }
 
-    private boolean displayEachRow(ArrayList<String[]> tableData) {
-        for (String[] row : tableData) {
-            hl7TableData.addRow(row);
+
+    private boolean displayEachRow(final HL7Message hl7Message) {
+        for (var i = 0; i < hl7Message.getSegments().size(); i++ ) {
+            final var segment = hl7Message.getSegments().get(i);
+
+            for (var j = 0; j < segment.getFieldList().size(); j++) {
+                final var field = segment.getFieldList().get(j);
+
+                for (var k = 0; k < field.getRepetitionList().size(); k++ ) {
+                    final var repetition = field.getRepetitionList().get(k);
+
+                    for (var l = 0; l < repetition.getComponentList().size(); l++) {
+                        final var comp = repetition.getComponentList().get(l);
+
+                        for (var m = 0; m < comp.getSubcomponentList().size(); m++ ) {
+                            final String value          = comp.getSubcomponentList().get(m);
+                            final String segHeader      = segment.getSegmentName();
+                            final StringBuilder index = calculateRowIndex(
+                                    segHeader,
+                                    j, field,
+                                    k, repetition,
+                                    l, comp, m);
+                            
+                            if (!value.trim().isEmpty())
+                                hl7TableData.addRow(new Object[]{
+                                    index, value
+                                } );
+                        }
+                    }
+                }
+            }
         }
+
         return hl7TableData.getRowCount() != 0;
     }
+
+
+    private static StringBuilder calculateRowIndex(
+            final String segHeader,
+            final int _fieldIndex,
+            final HL7Field field,
+            final int _repIndex,
+            final HL7Repetition repetition,
+            final int _compIndex,
+            final HL7Component comp,
+            final int _subcomponentIndex) {
+        final StringBuilder index   = new StringBuilder(segHeader);
+
+        final int fieldIndex = (segHeader.equals("MSH") && _fieldIndex != 0)
+                ? _fieldIndex + 1 : _fieldIndex;
+
+        index.append("-").append(fieldIndex);
+
+        if(field.hasRepetition())
+            index.append(".").append(_repIndex + 1);
+
+        if(repetition.hasComponent())
+            index.append(".").append(_compIndex + 1);
+
+        if(comp.hasSubcomponent())
+            index.append(".").append(_subcomponentIndex + 1);
+
+        return index;
+    }
+
 
     private void setupHeaderRenderer(JTable table) {
         table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
@@ -194,11 +267,11 @@ class HL7TableViewer extends JPanel {
                 Utilities.setPanelColors(label);
                 label.setHorizontalAlignment(SwingConstants.CENTER);
 
-                if (column < table.getColumnCount() - 1) {
+                if (column < table.getColumnCount() - 1)
                     label.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Utilities.TERCIARY_COLOR));
-                } else {
+                else
                     label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-                }
+
                 return label;
             }
         });

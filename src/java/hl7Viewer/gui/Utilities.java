@@ -12,10 +12,12 @@ public class Utilities {
     public static final Color TERCIARY_COLOR = Color.decode("#616161");
     public static final Color TEXT_COLOR = Color.decode("#1aab00");
 
+
     //method that allows you to specify how much padding you want
     public static EmptyBorder addPadding(int top, int left, int bottom, int right ){
         return new EmptyBorder(top, left, bottom, right);
     }
+
     //preconfigured Title boarder, just need panel obj and Title name
     public static void setTitledBorder(JComponent panel, String titleText) {
         TitledBorder border = BorderFactory.createTitledBorder(
@@ -30,12 +32,14 @@ public class Utilities {
         panel.setBackground(PRIMARY_COLOR);
         panel.setOpaque(true);
     }
+
     //used to set the background and text color for any panel jtext obj
     public static void setPanelColors(JComponent component) {
         component.setBackground(PRIMARY_COLOR);
         component.setOpaque(true);
         component.setForeground(TEXT_COLOR);
     }
+
     //Sets Title for message builder
     public static void createAndSetTitle(JPanel mainPanel, String titleText) {
         var titleLabel = new JLabel(titleText, SwingConstants.CENTER);
@@ -45,6 +49,7 @@ public class Utilities {
         titleLabel.setBorder(addPadding(8, 0, 8, 0));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
     }
+
     //creates scroll pane and customizes it
     public static void createAndSetScrollPane(JTextArea JTextArea, JPanel JPanel) {
         var scrollPane = new JScrollPane(JTextArea);
@@ -57,11 +62,13 @@ public class Utilities {
 
         JPanel.add(scrollPane, BorderLayout.CENTER);
     }
+
     //used to set color of buttons
     public static void setButtonColors(JButton useJsonBtn) {
         useJsonBtn.setBackground(SECONDARY_COLOR);
         useJsonBtn.setForeground(TEXT_COLOR);
     }
+
     //sets TextBox colors
     public static void setTextBox(JTextArea inputField, boolean isTransparentBackground, boolean isOpaque)  {
         inputField.setLineWrap(true);

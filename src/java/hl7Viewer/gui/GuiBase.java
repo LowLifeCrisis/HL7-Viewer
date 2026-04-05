@@ -9,7 +9,7 @@ import java.awt.event.WindowEvent;
 
 public class GuiBase extends JFrame {
     private final JPanel contentPanel;
-    
+
     public GuiBase() {
 
         setTitle("Hl7 Viewer");
@@ -18,10 +18,16 @@ public class GuiBase extends JFrame {
         setImageIcon();
         setWarningOnExit();
 
-        var menuBar1 = new MenuBar(this);
-        menuBar1.createMenuWithItem("View", "HL7 Parser", this::showHl7Viewer);
-        menuBar1.createMenuWithItem("View", "HL7 Builder", this::showMessageBuilderView);
-        setJMenuBar(menuBar1);
+        if (isMacOS()) {
+            System.setProperty("apple.awt.application.name", "HL7 Viewer");
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+        }
+
+        var menuBar = new MenuBar(this);
+//        menuBar.createMenuWithItem("File", "Settings", this::showMessageBuilderView);
+        menuBar.createMenuWithItem("View", "HL7 Parser", this::showHl7Viewer);
+//        menuBar.createMenuWithItem("View", "HL7 Builder", this::showMessageBuilderView);
+        setJMenuBar(menuBar);
 
         setBackground();
         contentPanel = setupContentPanel();
@@ -32,12 +38,21 @@ public class GuiBase extends JFrame {
         setLocationRelativeTo(null);
     }
 
+
     private void setImageIcon() {
-        final var iconURL = getClass().getResource("/images/important.jpg");
+        final var iconURL = getClass().getResource("/images/icon.png");
         assert iconURL != null;
         final var image = new ImageIcon(iconURL);
         setIconImage(image.getImage());
+
+        if (isMacOS()){
+            try {
+                Taskbar.getTaskbar().setIconImage(image.getImage());
+            } catch (UnsupportedOperationException e) {
+            }
+        }
     }
+
 
     private void setWarningOnExit() {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -54,9 +69,11 @@ public class GuiBase extends JFrame {
         });
     }
 
+
     private void setBackground() {
         getContentPane().setBackground(Utilities.PRIMARY_COLOR);
     }
+
 
     private JPanel setupContentPanel() {
         final JPanel contentPanel;
@@ -66,17 +83,20 @@ public class GuiBase extends JFrame {
         return contentPanel;
     }
 
+
     public void showHl7Viewer() {
         JPanel parserPanel =  (new HL7ParseViewer().createPanel());
         var TablePanel = new HL7TableViewer();
         panelRefresher(parserPanel);
 
     }
+
     //used to display the HL7 message builder
     public void showMessageBuilderView() {
         var builderPanel = new HL7MessageBuilder();
         panelRefresher(new HL7MessageBuilder().createMessageBuilderPanel());
     }
+
     //removes panels and adds new panels
     private void panelRefresher(JPanel mainPanel) {
         contentPanel.removeAll();
@@ -84,7 +104,13 @@ public class GuiBase extends JFrame {
         contentPanel.revalidate();
         contentPanel.repaint();
     }
-    
+
+
+    private static boolean isMacOS() {
+        return System.getProperty("os.name").toLowerCase().contains("mac");
+    }
+
+
     private boolean ifClickedYes(int option) {
         return option == JOptionPane.YES_OPTION;
     }

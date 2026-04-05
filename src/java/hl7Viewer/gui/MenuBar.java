@@ -33,7 +33,6 @@ public class MenuBar extends JMenuBar {
         JPopupMenu popup = newMenu.getPopupMenu();
         popup.setBorder(BorderFactory.createEmptyBorder());
         Utilities.setPanelColors(popup);
-
         add(newMenu);
         return newMenu;
     }
@@ -41,7 +40,7 @@ public class MenuBar extends JMenuBar {
     private boolean menuContainsItem(JMenu menu, String itemName) {
         for (int i = 0; i < menu.getItemCount(); i++) {
             JMenuItem item = menu.getItem(i);
-            if (item != null && itemName.equals(item.getText()))
+            if (itemName.equals(item.getText()))
                 return true;
         }
         return false;
