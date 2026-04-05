@@ -144,6 +144,8 @@
                                         <argument>${project.build.directory}/jpackage-input</argument>
                                         <argument>--main-jar</argument>
                                         <argument>${project.build.finalName}-shaded.jar</argument>
+                                        <argument>--main-class</argument>
+                                        <argument>hl7Viewer.Main</argument>
                                         <argument>--icon</argument>
                                         <argument>src/main/resources/icons/windows/icon.ico</argument>
                                         <argument>--type</argument>
