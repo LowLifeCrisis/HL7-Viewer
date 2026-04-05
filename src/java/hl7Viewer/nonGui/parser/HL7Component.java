@@ -9,13 +9,7 @@ public class HL7Component {
     public HL7Component(List<String> subcomponentList) {
         this.subcomponentList = subcomponentList;
     }
-
-
-    public void addSubcomponent(String subcomponent) {
-        if (subcomponent != null)
-            subcomponentList.add(subcomponent);
-    }
-
+    
 
     public List<String> getSubcomponentList() {
         return subcomponentList;

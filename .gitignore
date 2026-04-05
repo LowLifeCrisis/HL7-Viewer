@@ -30,3 +30,5 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+**/src/java/hl7Viewer/gui/HL7MessageBuilder.java

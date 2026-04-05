@@ -15,7 +15,7 @@ public class BasicMessageParser implements IMessageParser {
         if(!message.toUpperCase().contains("MSH"))
             throw new IllegalArgumentException("Invalid Message: message doesn't contain MSH");
 
-        HL7Message.sanitizeEnterChar(message);
+        message = HL7Message.sanitizeEnterChar(message);
 
         final var hl7Msg = new HL7Message();
         hl7Msg.setSegments(new ArrayList<>());
