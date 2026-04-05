@@ -55,8 +55,8 @@ jobs:
         run: mvn clean package -Pwindows
 
       - name: List target folder recursively
-        run: dir target /s
-
+        run: Get-ChildItem -Path target -Recurse
+        
       - name: Upload Windows MSI artifact
         uses: actions/upload-artifact@v4
         with:
