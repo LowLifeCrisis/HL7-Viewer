@@ -147,7 +147,7 @@
                                         <argument>--icon</argument>
                                         <argument>src/main/resources/icons/windows/icon.ico</argument>
                                         <argument>--type</argument>
-                                        <argument>exe</argument>
+                                        <argument>msi</argument>
                                         <argument>--dest</argument>
                                         <argument>${project.build.directory}</argument>
                                     </arguments>
