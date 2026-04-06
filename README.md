@@ -48,5 +48,5 @@ This is useful for developers who want to modify the project or rebuild it.
 - Open the `.dmg` and drag **HL7 Viewer.app** to your Applications folder.
 
 ### Windows
-- Download the `.exe` from [Releases](https://github.com/steven-llamas/hl7-message-parser/releases)
+- Download the `.msi` from [Releases](https://github.com/steven-llamas/hl7-message-parser/releases)
 - Run the installer and follow the setup wizard.
